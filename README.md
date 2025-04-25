@@ -108,10 +108,10 @@ Chatbox UI
 
 #### Questions
 
-Vector Database concepts + embeddings suggestions
-Can we use any Huggingface model? Clarification on model?
+Vector Database concepts + embeddings suggestions; not the end of the world if no vector database
+Can we use any Huggingface model? Clarification on model? no client data, can use any model
 
 Other concepts we may use in our project -
-If there is any use case that Joe feels like where we can use Embeddings and vector store? 
-Could we use two models together like picture generation models or any hugging face model?
-Can we deploy other models in Azure?
+If there is any use case that Joe feels like where we can use Embeddings and vector store? Create a knowledge store
+Could we use two models together like picture generation models or any hugging face model? Dall-e; would have to have two different calls for two models
+Can we deploy other models in Azure? Can deploy da-vinci; double check with Joe first
