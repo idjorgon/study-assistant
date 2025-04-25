@@ -24,7 +24,7 @@ flashcard_metadata = []  # List to store flashcard metadata (question, answer)
 # Function to generate embeddings using OpenAI
 def generate_embedding(text):
     """Generate an embedding vector for a given text using OpenAI's embedding model."""
-    response = client.Embedding.create(input=text, model="gpt-4-32k")
+    response = client.Embedding.create(input=text, model="gpt-4")
     return np.array(response['data'][0]['embedding'], dtype=np.float32)
 
 # Store flashcards in FAISS
