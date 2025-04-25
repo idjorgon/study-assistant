@@ -8,3 +8,5 @@ Welcome to the **Study Assistant** repository
 - **Generate Quiz**
 
 ## Getting Started
+
+Create .env file - please reach out for credentials
