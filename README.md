@@ -96,3 +96,22 @@ A: Carbon dioxide and water.
 
 Q: What are the main products of photosynthesis?
 A: Glucose and oxygen.
+
+
+#### Planning Board
+
+Add connection to the model
+Prompt Engineering
+Chat Completion
+Chaining of the prompts, agents
+Chatbox UI
+
+#### Questions
+
+Vector Database concepts + embeddings suggestions
+Can we use any Huggingface model? Clarification on model?
+
+Other concepts we may use in our project -
+If there is any use case that Joe feels like where we can use Embeddings and vector store? 
+Could we use two models together like picture generation models or any hugging face model?
+Can we deploy other models in Azure?
