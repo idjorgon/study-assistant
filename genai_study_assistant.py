@@ -7,10 +7,11 @@ from dotenv import load_dotenv
 # Set up your OpenAI API key and credentials
 load_dotenv(".env")
 api_key = os.getenv('AZURE_OPENAI_API_KEY')
+api_endpoint = os.getenv('AZURE_ENDPOINT')
 deployment_name = 'dggpt-4'
 
 client = AzureOpenAI(
-  azure_endpoint = 'https://tor-mtl-lat-genai-instance.openai.azure.com/', 
+  azure_endpoint=api_endpoint,
   api_key=api_key,  
   api_version="2025-01-01-preview"
 )
