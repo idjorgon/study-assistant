@@ -13,11 +13,13 @@ Create .env file - please reach out for credentials
 
 ## Example Workflow
 
-1. Generating Flashcards
+### 1. Generating Flashcards
 
 User Input:
 Enter the text you'd like to convert into flashcards:
+
 Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll. The process involves carbon dioxide and water, resulting in the production of glucose and oxygen.
+
 Assistant Output:
 Generating Flashcards...
 
@@ -29,10 +31,14 @@ Flashcards:
 3. Q: What are the main products of photosynthesis?
    A: Glucose and oxygen.
 
-2. Summarizing Text
+
+### 2. Summarizing Text
+
 User Input:
 Enter the text you'd like to summarize:
+
 Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll. The process involves carbon dioxide and water, resulting in the production of glucose and oxygen.
+
 Assistant Output:
 Summarizing Text...
 
@@ -41,10 +47,14 @@ Summary:
 - Reactants: carbon dioxide and water.
 - Products: glucose and oxygen.
 
-3. Generating a Quiz
+
+### 3. Generating a Quiz
+
 User Input:
 Enter the text you'd like to use for generating a quiz:
+
 Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll. The process involves carbon dioxide and water, resulting in the production of glucose and oxygen.
+
 Assistant Output:
 Generating Quiz...
 
@@ -67,10 +77,13 @@ Quiz:
    c) Chlorophyll and sunlight
    d) Oxygen and water
 
-4. Searching Flashcards
+
+### 4. Searching Flashcards
+
 User Input:
-Enter your flashcard search query:
+Enter your flashcard search query: 
 What is photosynthesis?
+
 Assistant Output:
 Searching Flashcards...
 
