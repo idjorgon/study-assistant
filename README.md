@@ -97,15 +97,13 @@ A: Carbon dioxide and water.
 Q: What are the main products of photosynthesis?
 A: Glucose and oxygen.
 
-
-#### Planning Board
+## Planning Board
 
 Add connection to the model
 Prompt Engineering
 Chat Completion
 Chaining of the prompts, agents
 Chatbox UI
-
 
 #### Questions & Answers
 
