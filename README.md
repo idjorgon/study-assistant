@@ -106,12 +106,20 @@ Chat Completion
 Chaining of the prompts, agents
 Chatbox UI
 
-#### Questions
 
-Vector Database concepts + embeddings suggestions; not the end of the world if no vector database
-Can we use any Huggingface model? Clarification on model? no client data, can use any model
+#### Questions & Answers
 
-Other concepts we may use in our project -
-If there is any use case that Joe feels like where we can use Embeddings and vector store? Create a knowledge store
-Could we use two models together like picture generation models or any hugging face model? Dall-e; would have to have two different calls for two models
-Can we deploy other models in Azure? Can deploy da-vinci; double check with Joe first
+Q. Vector Database concepts + embeddings suggestions; 
+A. Not the end of the world if no vector database
+
+Q. Can we use any Huggingface model? Clarification on model? 
+A. Can use any model - no client data
+
+Q. If there is any use case that Joe feels like where we can use Embeddings and vector store? 
+A. Can create a knowledge store for our use case
+
+Q. Could we use two models together like picture generation models or any hugging face model? 
+A. Yes, Dall-e; would have to have two different calls for two models
+
+Q. Can we deploy other models in Azure? 
+A. Can deploy da-vinci; double check with Joe first
