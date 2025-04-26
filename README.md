@@ -99,11 +99,11 @@ A: Glucose and oxygen.
 
 ## Planning Board
 
-Add connection to the model
-Prompt Engineering
-Chat Completion
-Chaining of the prompts, agents
-Chatbox UI
+1. Add connection to the model
+2. Prompt Engineering
+3. Chat Completion
+4. Chaining of the prompts, agents
+5. Chatbox UI
 
 #### Questions & Answers
 
