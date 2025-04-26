@@ -23,8 +23,8 @@ flashcard_metadata = []  # List to store flashcard metadata (question, answer)
 
 # Function to generate embeddings using OpenAI
 def generate_embedding(text):
-    """Generate an embedding vector for a given text using OpenAI's embedding model."""
-    response = client.Embedding.create(input=text, model="dggpt-4")
+    """Generate an embedding vector for a given text using OpenAI's model."""
+    response = client.embeddings.create(input=text, model=deployment_name)
     return np.array(response['data'][0]['embedding'], dtype=np.float32)
 
 # Store flashcards in FAISS
@@ -59,47 +59,43 @@ def generate_flashcards(text):
         temperature=0.5
     )
     # Extract and return the flashcards
-    flashcards = response.choices[0].message.content.strip()
-    print(flashcards)
+    flashcards = response.choices[0].message.content
+    #print(flashcards)
     return flashcards
 
 # Summarize text using OpenAI
 def summarize_text(text):
     """Summarize the input text."""
-    prompt = f"""
-    Summarize the following text into concise bullet points:
-    ---
-    {text}
-    ---
-    Summary:
-    - 
-    """
+    
+    messages = [
+        {"role": "system", "content": "You are an assistant that summarizes input text."},
+        {"role": "user", "content": f"Summarize the following text into concise bullet points:\n\n{text}"}
+    ]
+    
     response = client.chat.completions.create(
         model=deployment_name,
-        prompt=prompt,
+        messages=messages,
         max_tokens=150,
         temperature=0.5
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message.content
 
 # Generate quizzes using OpenAI
 def generate_quiz(text):
     """Generate multiple-choice questions from input text."""
-    prompt = f"""
-    Create 3 multiple-choice questions from the following text. Each question should have 4 options and the correct answer should be marked with an asterisk (*):
-    ---
-    {text}
-    ---
-    Questions:
-    1. 
-    """
+    
+    messages = [
+        {"role": "system", "content": "You are an assistant that generates multiple-choice questions from input text."},
+        {"role": "user", "content": f"Generate multiple-choice questions from the input text:\n\n{text}"}
+    ]
+        
     response = client.chat.completions.create(
         model=deployment_name,
-        prompt=prompt,
+        messages=messages,
         max_tokens=300,
         temperature=0.7
     )
-    return response.choices[0].text.strip()
+    return response.choices[0].message.content
 
 # Main Study Assistant Function
 def study_assistant():
