@@ -111,38 +111,65 @@ st.title(" My Study Assistant ")
 # Initialize chat history and state
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "Welcome to the GenAI Study Assistant!:\n1. Generate Flashcards 📚\n2. Summarize Text 📜\n3. Generate Quiz 🌎 \n4. Search Flashcards!"}]
-    st.session_state.stage = "main_menu"
+    st.session_state["stage"] = "main_menu"
 
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
-
-# Chat input
-choice = st.text_input("Enter your choice .. ")
 
 # if choice:
 #     st.chat_message("user").write(choice)
 #     st.session_state.messages.append({"role": "user", "content": choice})
 
-if st.session_state.stage == "main_menu": 
-    if choice == "1":
-        flashcard_word=st.text_input("Enter the text you'd like to convert into flashcards")
-            
-        if not flashcard_word:
-            st.warning('Please input text')
-            st.stop  
-        st.success("Thank you")
+if st.session_state.stage == "main_menu":
+    choice = st.text_input("Enter your choice .. ") 
+    
+    if choice:
+        st.session_state.messages.append({"role": "user", "content": choice})
+    
+        if choice == "1":
+            st.session_state["stage"]="flashcard"
+        
+        elif choice == "2":
+            st.session_state["stage"]="summarize"      
+        # text = input("\nEnter the text you'd like to summarize:\n")
+        # print("\nSummarizing Text...")      
+        # print(f"\nSummary:\n{summary}")
+    
+        elif choice == "3":
+            st.session_state["stage"]="quiz"
+        
+        elif choice == "4":
+            st.session_state["stage"]="query"
+    
+        else:
+            bot_reply ="Invalid choice. Please try again."
+            st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+            st.chat_message("assistant").write(bot_reply)
+       
 
+if st.session_state["stage"] == "summarize":
+    text=st.text_input("Enter the text you'd like to summarize:")
+        
+    if text:
+        summary = summarize_text(text)
+        st.session_state.messages.append({"role": "assistant", "content": summary})
+        st.chat_message("assistant").write(summary)
+
+elif st.session_state["stage"] == "flashcard":
+    flashcard_word=st.text_input("Enter the text you'd like to convert into flashcards")
+            
+    if flashcard_word:
         bot_reply= "Generating Flashcards for ..." + flashcard_word
         st.session_state.messages.append({"role": "assistant", "content": bot_reply})
         st.chat_message("assistant").write(bot_reply)
-            #text = input("\nEnter the text you'd like to convert into flashcards:\n")
-            #print("\nGenerating Flashcards...")
+        #text = input("\nEnter the text you'd like to convert into flashcards:\n")
+        #print("\nGenerating Flashcards...")
         flashcards = generate_flashcards(flashcard_word)
         st.session_state.messages.append({"role": "assistant", "content": flashcards})
         st.chat_message("assistant").write(flashcards)
-            # print(f"\nFlashcards:\n{flashcards}")
+        # print(f"\nFlashcards:\n{flashcards}")
         
-            # Store flashcards in FAISS
+        # Store flashcards in FAISS
         for line in flashcards.split("\n"):
             if line.startswith("Q:"):
                 question = line[3:].strip()
@@ -152,28 +179,10 @@ if st.session_state.stage == "main_menu":
         
         print("\nFlashcards have been stored locally in FAISS.")
 
-    elif choice == "2":
-        text=st.text_input("Enter the text you'd like to summarize:")
+elif st.session_state["stage"] == "quiz" :
+    text=st.text_input("Enter the text you'd like to use for generating a quiz:")
         
-        if not text:
-            st.warning('Please input text')
-            st.stop  
-        st.success("Thank you")
-        # text = input("\nEnter the text you'd like to summarize:\n")
-        # print("\nSummarizing Text...")
-        summary = summarize_text(text)
-        st.session_state.messages.append({"role": "assistant", "content": summary})
-        st.chat_message("assistant").write(summary)
-        # print(f"\nSummary:\n{summary}")
-    
-    elif choice == "3":
-        text=st.text_input("Enter the text you'd like to use for generating a quiz:")
-        
-        if not text:
-            st.warning('Please input text')
-            st.stop  
-        st.success("Thank you")
-        
+    if text:    
         bot_reply= "Generating Quiz ..." + text
         st.session_state.messages.append({"role": "assistant", "content": bot_reply})
         st.chat_message("assistant").write(bot_reply)
@@ -182,16 +191,12 @@ if st.session_state.stage == "main_menu":
         st.session_state.messages.append({"role": "assistant", "content": quiz})
         st.chat_message("assistant").write(quiz)
         # print(f"\nQuiz:\n{quiz}")
-    
-    elif choice == "4":
-        query=st.text_input("Enter your flashcard search query:")
+
+elif st.session_state["stage"] == "query" :
+    query=st.text_input("Enter your flashcard search query:")
         # query = input("\nEnter your flashcard search query:\n")
 
-        if not query:
-            st.warning('Please input text')
-            st.stop  
-        st.success("Thank you")
-        
+    if query:
         bot_reply= "Searching Flashcards..." + query
         st.session_state.messages.append({"role": "assistant", "content": bot_reply})
         st.chat_message("assistant").write(bot_reply)
@@ -203,12 +208,7 @@ if st.session_state.stage == "main_menu":
         # print("\nRelevant Flashcards:")
         for match in results:
             print(f"Q: {match['question']}\nA: {match['answer']}\n")
-    
-    else:
-        bot_reply ="Invalid choice. Please try again."
-        st.session_state.messages.append({"role": "assistant", "content": bot_reply})
-        st.session_state.stage = "main_menu"
-        
+
 # Run the assistant
 if __name__ == "__main__":
     study_assistant()
