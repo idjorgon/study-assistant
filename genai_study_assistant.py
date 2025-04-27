@@ -1,3 +1,4 @@
+import streamlit as st
 import os
 from openai import AzureOpenAI
 import faiss
@@ -15,7 +16,7 @@ client = AzureOpenAI(
   api_key=api_key,  
   api_version="2025-01-01-preview"
 )
-
+    
 # Initialize FAISS index
 embedding_dim = 1536  # Dimensionality of OpenAI's model embedding
 faiss_index = faiss.IndexFlatL2(embedding_dim)  # L2 distance for similarity search
@@ -95,23 +96,78 @@ def generate_quiz(text):
         max_tokens=300,
         temperature=0.7
     )
+
     return response.choices[0].message.content
 
 # Main Study Assistant Function
 def study_assistant():
-    print("Welcome to the GenAI Study Assistant!")
-    print("Choose an option:")
-    print("1. Generate Flashcards")
-    print("2. Summarize Text")
-    print("3. Generate Quiz")
-    print("4. Search Flashcards")
-    choice = input("Enter your choice (1/2/3/4): ")
 
-    if choice == "1":
-        text = input("\nEnter the text you'd like to convert into flashcards:\n")
-        print("\nGenerating Flashcards...")
-        flashcards = generate_flashcards(text)
-        print(f"\nFlashcards:\n{flashcards}")
+    with st.sidebar:
+        "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
+        "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
+
+st.title(" My Study Assistant ")
+
+# Initialize chat history and state
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [{"role": "assistant", "content": "Welcome to the GenAI Study Assistant!:\n1. Generate Flashcards 📚\n2. Summarize Text 📜\n3. Generate Quiz 🌎 \n4. Search Flashcards!"}]
+    st.session_state["stage"] = "main_menu"
+
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
+
+# if choice:
+#     st.chat_message("user").write(choice)
+#     st.session_state.messages.append({"role": "user", "content": choice})
+
+if st.session_state.stage == "main_menu":
+    choice = st.text_input("Enter your choice .. ") 
+    
+    if choice:
+        st.session_state.messages.append({"role": "user", "content": choice})
+    
+        if choice == "1":
+            st.session_state["stage"]="flashcard"
+        
+        elif choice == "2":
+            st.session_state["stage"]="summarize"      
+        # text = input("\nEnter the text you'd like to summarize:\n")
+        # print("\nSummarizing Text...")      
+        # print(f"\nSummary:\n{summary}")
+    
+        elif choice == "3":
+            st.session_state["stage"]="quiz"
+        
+        elif choice == "4":
+            st.session_state["stage"]="query"
+    
+        else:
+            bot_reply ="Invalid choice. Please try again."
+            st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+            st.chat_message("assistant").write(bot_reply)
+       
+
+if st.session_state["stage"] == "summarize":
+    text=st.text_input("Enter the text you'd like to summarize:")
+        
+    if text:
+        summary = summarize_text(text)
+        st.session_state.messages.append({"role": "assistant", "content": summary})
+        st.chat_message("assistant").write(summary)
+
+elif st.session_state["stage"] == "flashcard":
+    flashcard_word=st.text_input("Enter the text you'd like to convert into flashcards")
+            
+    if flashcard_word:
+        bot_reply= "Generating Flashcards for ..." + flashcard_word
+        st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+        st.chat_message("assistant").write(bot_reply)
+        #text = input("\nEnter the text you'd like to convert into flashcards:\n")
+        #print("\nGenerating Flashcards...")
+        flashcards = generate_flashcards(flashcard_word)
+        st.session_state.messages.append({"role": "assistant", "content": flashcards})
+        st.chat_message("assistant").write(flashcards)
+        # print(f"\nFlashcards:\n{flashcards}")
         
         # Store flashcards in FAISS
         for line in flashcards.split("\n"):
@@ -123,28 +179,35 @@ def study_assistant():
         
         print("\nFlashcards have been stored locally in FAISS.")
 
-    elif choice == "2":
-        text = input("\nEnter the text you'd like to summarize:\n")
-        print("\nSummarizing Text...")
-        summary = summarize_text(text)
-        print(f"\nSummary:\n{summary}")
-    
-    elif choice == "3":
-        text = input("\nEnter the text you'd like to use for generating a quiz:\n")
-        print("\nGenerating Quiz...")
+elif st.session_state["stage"] == "quiz" :
+    text=st.text_input("Enter the text you'd like to use for generating a quiz:")
+        
+    if text:    
+        bot_reply= "Generating Quiz ..." + text
+        st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+        st.chat_message("assistant").write(bot_reply)
+        # print("\nGenerating Quiz...")
         quiz = generate_quiz(text)
-        print(f"\nQuiz:\n{quiz}")
-    
-    elif choice == "4":
-        query = input("\nEnter your flashcard search query:\n")
-        print("\nSearching Flashcards...")
+        st.session_state.messages.append({"role": "assistant", "content": quiz})
+        st.chat_message("assistant").write(quiz)
+        # print(f"\nQuiz:\n{quiz}")
+
+elif st.session_state["stage"] == "query" :
+    query=st.text_input("Enter your flashcard search query:")
+        # query = input("\nEnter your flashcard search query:\n")
+
+    if query:
+        bot_reply= "Searching Flashcards..." + query
+        st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+        st.chat_message("assistant").write(bot_reply)
+        
+        # print("\nSearching Flashcards...")
         results = search_flashcards(query)
-        print("\nRelevant Flashcards:")
+        st.session_state.messages.append({"role": "assistant", "content": results})
+        st.chat_message("assistant").write(results)
+        # print("\nRelevant Flashcards:")
         for match in results:
             print(f"Q: {match['question']}\nA: {match['answer']}\n")
-    
-    else:
-        print("Invalid choice. Please try again.")
 
 # Run the assistant
 if __name__ == "__main__":
