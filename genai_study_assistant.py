@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from flashcards import generate_flashcards, store_flashcard, search_flashcards
 from quiz import generate_quiz
 from summary import summarize_text
+from langchain.chat_models import AzureChatOpenAI
 
 # Set up your OpenAI API key and credentials
 load_dotenv(".env")
@@ -18,6 +19,14 @@ client = AzureOpenAI(
   azure_endpoint=api_endpoint,
   api_key=api_key,  
   api_version=apiversion
+)
+
+llmClient = AzureChatOpenAI(
+    openai_api_key=api_key,
+    azure_endpoint=api_endpoint,
+    openai_api_version=apiversion,
+    deployment_name=deployment_name,
+    temperature=0.7
 )
 
 # Main Study Assistant Function
@@ -72,19 +81,20 @@ def study_assistant():
             bot_reply = "Generating Flashcards for ..." + flashcard_word
             st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
             st.chat_message("assistant").write(bot_reply)
-            flashcards = generate_flashcards(flashcard_word, client, deployment_name)
+            flashcards = generate_flashcards(flashcard_word,llmClient)
             st.session_state["messages"].append({"role": "assistant", "content": flashcards})
             st.chat_message("assistant").write(flashcards)
 
-            # Store flashcards in FAISS
-            for line in flashcards.split("\n"):
-                if line.startswith("Q:"):
-                    question = line[3:].strip()
-                    answer_index = flashcards.find(f"A:", flashcards.find(line))
-                    answer = flashcards[answer_index + 3:].split("\n")[0].strip()
-                    store_flashcard(question, answer, client, deployment_name)
+            # Store flashcards in FAISS 
+            # TODO: Uncomment the following lines to store flashcards in FAISS- once decided
+            # for line in flashcards.split("\n"):
+            #     if line.startswith("Q:"):
+            #         question = line[3:].strip()
+            #         answer_index = flashcards.find(f"A:", flashcards.find(line))
+            #         answer = flashcards[answer_index + 3:].split("\n")[0].strip()
+            #         store_flashcard(question, answer, client, deployment_name)
 
-            print("\nFlashcards have been stored locally in FAISS.")
+            # print("\nFlashcards have been stored locally in FAISS.")
 
     # Quiz generation logic
     elif st.session_state["stage"] == "quiz":

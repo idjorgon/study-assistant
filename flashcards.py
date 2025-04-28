@@ -1,26 +1,60 @@
 import faiss
 import numpy as np
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain, SequentialChain
 
+subtopics_prompt = PromptTemplate(
+    input_variables=["topic"],
+    template="""
+You are an expert educator. Break down the following topic into 5 important subtopics. Output only the subtopics as a simple numbered list.
+
+Topic: {topic}
+"""
+)
+
+# Prompt 2 - Generate Flashcards
+flashcards_prompt = PromptTemplate(
+    input_variables=["subtopics"],
+    template="""
+You are a flashcard creator. For each of the following subtopics, create a simple flashcard. Each flashcard should have a Question and Answer format. Keep the explanation concise but clear.
+
+Subtopics:
+{subtopics}
+"""
+)
 
 # Generate flashcards using OpenAI
-def generate_flashcards(text,client, deployment_name):
+def generate_flashcards(text,llmClient):
+    
     """Generate flashcards (Q&A pairs) from input text."""
-
-    messages = [
-        {"role": "system", "content": "You are an assistant that creates educational flashcards."},
-        {"role": "user", "content": f"Create flashcards in Q&A format from the following text:\n\n{text}"}
-    ]
-
-    response = client.chat.completions.create(
-        model=deployment_name,
-        messages=messages,
-        max_tokens=300,
-        temperature=0.5
+    # Chain 1 - Subtopics Generation
+    subtopics_chain = LLMChain(
+        llm=llmClient,
+        prompt=subtopics_prompt,
+        output_key="subtopics",
     )
-    # Extract and return the flashcards
-    flashcards = response.choices[0].message.content
+
+    # Chain 2 - Flashcards Generation
+    flashcards_chain = LLMChain(
+        llm=llmClient,
+        prompt=flashcards_prompt,
+        output_key="flashcards",
+    )
+
+    # 4. Chain them together
+    overall_chain = SequentialChain(
+        chains=[subtopics_chain, flashcards_chain],
+        input_variables=["topic"],
+        output_variables=["subtopics", "flashcards"],
+        verbose=True,  # (optional) show intermediate steps
+    )
+    input_topic = text
+
+    # Run the final chain
+    result = overall_chain.invoke({"topic": input_topic})
+
     #print(flashcards)
-    return flashcards
+    return result['flashcards']
 
 # Initialize FAISS index
 embedding_dim = 1536  # Dimensionality of OpenAI's model embedding
