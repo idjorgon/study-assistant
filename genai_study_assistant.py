@@ -1,8 +1,9 @@
 import streamlit as st
 import os
+from tavily import TavilyClient
 from openai import AzureOpenAI
 from dotenv import load_dotenv
-from flashcards import generate_flashcards, store_flashcard, search_flashcards
+from flashcards import generate_flashcards, store_flashcard, search_internet
 from quiz import generate_quiz
 from summary import summarize_text
 from langchain.chat_models import AzureChatOpenAI
@@ -13,6 +14,7 @@ api_key = os.getenv('AZURE_OPENAI_API_KEY')
 api_endpoint = os.getenv('AZURE_ENDPOINT')
 deployment_name = os.getenv('DEPLOYMENT_NAME')
 apiversion = os.getenv('AZURE_OPENAI_API_VERSION')
+tavilyclient= os.getenv('TAVILY_KEY')
 
 # Initialize OpenAI client
 client = AzureOpenAI(
@@ -20,6 +22,8 @@ client = AzureOpenAI(
   api_key=api_key,  
   api_version=apiversion
 )
+
+tavily_client = TavilyClient(api_key=tavilyclient)
 
 llmClient = AzureChatOpenAI(
     openai_api_key=api_key,
@@ -37,10 +41,16 @@ def study_assistant():
 
     st.title(" My Study Assistant ")
 
-    # Initialize chat history and state
     if "messages" not in st.session_state:
-        st.session_state["messages"] = [{"role": "assistant", "content": "Welcome to the GenAI Study Assistant!:\n1. Generate Flashcards 📚\n2. Summarize Text 📜\n3. Generate Quiz 🌎 \n4. Search Flashcards!"}]
+        st.session_state["messages"] =[]
+
+    if "stage" not in st.session_state:
         st.session_state["stage"] = "main_menu"
+
+    # Initialize chat history and state
+    if st.session_state["stage"] == "main_menu":
+        if not st.session_state["messages"] or "Welcome to the GenAI Study" not in st.session_state["messages"][-1]["content"]:
+            st.session_state["messages"].append({"role": "assistant", "content": "Welcome to the GenAI Study Assistant!:\n1. Generate Flashcards 📚\n2. Summarize Text 📜\n3. Generate Quiz 🌎 \n4. Ask me anything!"})
 
     # Display chat messages
     for msg in st.session_state["messages"]:
@@ -67,12 +77,19 @@ def study_assistant():
 
     # Summarize text logic
     if st.session_state["stage"] == "summarize":
-        text = st.text_input("Enter the text you'd like to summarize:")
+        text = st.text_input("Enter the text you'd like to summarize:" , key="summary_input")
+
         if text:
             summary = summarize_text(text, client, deployment_name)
+            st.session_state["messages"].append({"role": "assistant", "content": text})
             st.session_state["messages"].append({"role": "assistant", "content": summary})
             st.chat_message("assistant").write(summary)
 
+            st.session_state.pop("summary_input", None)
+            st.session_state["stage"] == "main_menu"
+            st.rerun()
+        
+        
     # Flashcard generation logic
     elif st.session_state["stage"] == "flashcard":
         flashcard_word = st.text_input("Enter the text you'd like to convert into flashcards")
@@ -105,22 +122,29 @@ def study_assistant():
             st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
             st.chat_message("assistant").write(bot_reply)
             quiz = generate_quiz(text, client, deployment_name)
+            st.session_state["messages"].append({"role": "assistant", "content": text})
             st.session_state["messages"].append({"role": "assistant", "content": quiz})
             st.chat_message("assistant").write(quiz)
     # Flashcard search logic
+    
     elif st.session_state["stage"] == "query":
-        query = st.text_input("Enter your flashcard search query:")
+        query = st.text_input("Ask me anything:")
 
         if query:
-            bot_reply = "Searching Flashcards..." + query
+            bot_reply = "Searching most recent research /books/ articles..." + query
             st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
             st.chat_message("assistant").write(bot_reply)
-            results = search_flashcards(query,client, deployment_name,top_k=3)
-            st.session_state["messages"].append({"role": "assistant", "content": results})
-            st.chat_message("assistant").write(results)
+            search = search_internet(query,tavily_client,top_k=3)
 
-            for match in results:
-                print(f"Q: {match['question']}\nA: {match['answer']}\n")
+            sources = search.get("results", [])
+            if sources:
+                for i, source in enumerate(sources, 1):
+                    st.chat_message("assistant").write(
+                        f"**Source {i}:** [{source.get('title', 'No Title')}]({source.get('url', '')})\n\n"
+                        f"📌 {source.get('content', 'No content')}"
+                    )
+            else:
+                st.chat_message("assistant").write("No sources found.")
 
 # Run the assistant
 if __name__ == "__main__":

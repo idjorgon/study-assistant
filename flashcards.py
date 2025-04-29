@@ -1,3 +1,4 @@
+import asyncio
 import faiss
 import numpy as np
 from langchain.prompts import PromptTemplate
@@ -76,11 +77,10 @@ def store_flashcard(question, answer,client, deployment_name):
     flashcard_metadata.append({"question": question, "answer": answer})  # Store metadata
 
 # Retrieve similar flashcards
-def search_flashcards(query, client, deployment_name,top_k=3):
-    """Search for similar flashcards in FAISS based on a query."""
-    query_embedding = generate_embedding(query,client, deployment_name)  # Generate embedding for the query
-    distances, indices = faiss_index.search(np.array([query_embedding]), top_k)  # FAISS search
-    results = [flashcard_metadata[i] for i in indices[0] if i < len(flashcard_metadata)]
-    return results
+def search_internet(query, client,top_k=3):
+    """Search the internet."""
+    queries ="Give the lastest studies/reasearch paper regarding " + query
+    responses = client.search(queries , max_result=3)  # Generate embedding for the query
+    return responses
 
 
