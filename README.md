@@ -13,11 +13,12 @@ Welcome to the **Study Assistant** repository!
 ## Getting Started
 
 - Create .env file for API keys and other env variables (reach out for credentials):
-AZURE_OPENAI_API_KEY
-AZURE_ENDPOINT
-AZURE_OPENAI_API_VERSION
-DEPLOYMENT_NAME
-TAVILY_KEY
+
++ AZURE_OPENAI_API_KEY
++ AZURE_ENDPOINT
++ AZURE_OPENAI_API_VERSION
++ DEPLOYMENT_NAME
++ TAVILY_KEY
 
 - Install dependencies located in requirements.txt
 
