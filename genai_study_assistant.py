@@ -3,7 +3,7 @@ import os
 from tavily import TavilyClient
 from openai import AzureOpenAI
 from dotenv import load_dotenv
-from flashcards import generate_flashcards, store_flashcard, search_internet
+from flashcards import generate_flashcards, search_internet
 from quiz import generate_quiz
 from summary import summarize_text
 from langchain.chat_models import AzureChatOpenAI
@@ -102,17 +102,6 @@ def study_assistant():
             st.session_state["messages"].append({"role": "assistant", "content": flashcards})
             st.chat_message("assistant").write(flashcards)
 
-            # Store flashcards in FAISS 
-            # TODO: Uncomment the following lines to store flashcards in FAISS- once decided
-            # for line in flashcards.split("\n"):
-            #     if line.startswith("Q:"):
-            #         question = line[3:].strip()
-            #         answer_index = flashcards.find(f"A:", flashcards.find(line))
-            #         answer = flashcards[answer_index + 3:].split("\n")[0].strip()
-            #         store_flashcard(question, answer, client, deployment_name)
-
-            # print("\nFlashcards have been stored locally in FAISS.")
-
     # Quiz generation logic
     elif st.session_state["stage"] == "quiz":
         text = st.text_input("Enter the text you'd like to use for generating a quiz:")
@@ -125,8 +114,8 @@ def study_assistant():
             st.session_state["messages"].append({"role": "assistant", "content": text})
             st.session_state["messages"].append({"role": "assistant", "content": quiz})
             st.chat_message("assistant").write(quiz)
-    # Flashcard search logic
     
+    # Flashcard search logic
     elif st.session_state["stage"] == "query":
         query = st.text_input("Ask me anything:")
 
