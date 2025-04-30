@@ -1,26 +1,40 @@
 # Study Assistant
 
-Welcome to the **Study Assistant** repository
+Welcome to the **Study Assistant** repository!
+
 
 ## Features
-- **Flashcards**
+
+- **Generate Flashcards**
 - **Summarize Test**
 - **Generate Quiz**
+- **Ask Questions**
 
 ## Getting Started
 
-Create .env file - please reach out for credentials
+- Create .env file for API keys and other env variables (reach out for credentials):
+AZURE_OPENAI_API_KEY
+AZURE_ENDPOINT
+AZURE_OPENAI_API_VERSION
+DEPLOYMENT_NAME
+TAVILY_KEY
+
+- Install dependencies located in requirements.txt
+
+## Usage
+
+- Type `streamlit run genai_study_assistant.py` in your terminal
+
 
 ## Example Workflow
 
 ### 1. Generating Flashcards
 
-User Input:
+Input:
 Enter the text you'd like to convert into flashcards:
 
 Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll. The process involves carbon dioxide and water, resulting in the production of glucose and oxygen.
 
-Assistant Output:
 Generating Flashcards...
 
 Flashcards:
@@ -34,12 +48,11 @@ Flashcards:
 
 ### 2. Summarizing Text
 
-User Input:
+Input:
 Enter the text you'd like to summarize:
 
 Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll. The process involves carbon dioxide and water, resulting in the production of glucose and oxygen.
 
-Assistant Output:
 Summarizing Text...
 
 Summary:
@@ -50,12 +63,11 @@ Summary:
 
 ### 3. Generating a Quiz
 
-User Input:
+Input:
 Enter the text you'd like to use for generating a quiz:
 
 Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll. The process involves carbon dioxide and water, resulting in the production of glucose and oxygen.
 
-Assistant Output:
 Generating Quiz...
 
 Quiz:
@@ -78,46 +90,22 @@ Quiz:
    d) Oxygen and water
 
 
-### 4. Searching Flashcards
+### 4. Asking Questions
 
-User Input:
-Enter your flashcard search query: 
-What is photosynthesis?
+Ask any question and wait for the response (we are using Tavily to answer this based on most recent studies/books/reasearches).
 
-Assistant Output:
-Searching Flashcards...
 
-Relevant Flashcards:
-Q: What is photosynthesis?
-A: The process by which green plants and some organisms use sunlight to synthesize food.
+## Concepts we used
 
-Q: What are the main reactants in photosynthesis?
-A: Carbon dioxide and water.
-
-Q: What are the main products of photosynthesis?
-A: Glucose and oxygen.
-
-## Planning Board
-
-1. Add connection to the model
+1. LLM
 2. Prompt Engineering
 3. Chat Completion
-4. Chaining of the prompts, agents
+4. Langchain, chaining of the prompts
 5. Chatbox UI
+6. Tavily
 
-#### Questions & Answers
 
-Q. Vector Database concepts + embeddings suggestions; 
-A. Not the end of the world if no vector database
+## Future/proposed enhancements
 
-Q. Can we use any Huggingface model? Clarification on model? 
-A. Can use any model - no client data
-
-Q. If there is any use case that Joe feels like where we can use Embeddings and vector store? 
-A. Can create a knowledge store for our use case
-
-Q. Could we use two models together like picture generation models or any hugging face model? 
-A. Yes, Dall-e; would have to have two different calls for two models
-
-Q. Can we deploy other models in Azure? 
-A. Can deploy da-vinci; double check with Joe first
+1. Adding images/pictures
+2. Level of difficulty
