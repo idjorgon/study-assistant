@@ -6,7 +6,7 @@ Welcome to the **Study Assistant** repository!
 ## Features
 
 - **Generate Flashcards**
-- **Summarize Test**
+- **Summarize Text**
 - **Generate Quiz**
 - **Ask Questions**
 
@@ -109,6 +109,7 @@ Ask any question and wait for the response (we are using Tavily to answer this b
 
 ## Future/proposed enhancements
 
-1. Adding images/pictures
-2. Level of difficulty
-3. Re-running the chatbox
+1. Suggestion from Joe Palmer: explore Ragas
+2. Adding images/pictures
+3. Level of difficulty
+4. Re-running the chatbox
