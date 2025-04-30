@@ -12,7 +12,8 @@ Welcome to the **Study Assistant** repository!
 
 ## Getting Started
 
-- Create .env file for API keys and other env variables (reach out for credentials):
+1. Create a .venv environment in VSCode (you'll need Python as a prerequisite)
+2. Create .env file for API keys and other env variables (reach out for credentials):
 
 + AZURE_OPENAI_API_KEY
 + AZURE_ENDPOINT
@@ -20,7 +21,7 @@ Welcome to the **Study Assistant** repository!
 + DEPLOYMENT_NAME
 + TAVILY_KEY
 
-- Install dependencies located in requirements.txt
+3. Install dependencies located in requirements.txt
 
 ## Usage
 
