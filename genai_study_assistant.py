@@ -3,7 +3,7 @@ import os
 from tavily import TavilyClient
 from openai import AzureOpenAI
 from dotenv import load_dotenv
-from flashcards import generate_flashcards, search_internet
+from flashcards import generate_flashcards, search_internet,search_books
 from quiz import generate_quiz
 from summary import summarize_text
 from langchain.chat_models import AzureChatOpenAI
@@ -101,6 +101,20 @@ def study_assistant():
             flashcards = generate_flashcards(flashcard_word,llmClient)
             st.session_state["messages"].append({"role": "assistant", "content": flashcards})
             st.chat_message("assistant").write(flashcards)
+            bot_reply = "Here are some recent Books to improve on your learning...."
+            st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
+            st.chat_message("assistant").write(bot_reply)
+            search = search_books(flashcard_word,tavily_client)
+
+            sources = search.get("results", [])
+            if sources:
+                for i, source in enumerate(sources[:2], 1):
+                    st.chat_message("assistant").write(
+                        f"**Source {i}:** [{source.get('title', 'No Title')}]({source.get('url', '')})\n"
+                    )
+            else:
+                st.chat_message("assistant").write("No recent study material found.")
+            
 
     # Quiz generation logic
     elif st.session_state["stage"] == "quiz":
@@ -115,7 +129,7 @@ def study_assistant():
             st.session_state["messages"].append({"role": "assistant", "content": quiz})
             st.chat_message("assistant").write(quiz)
     
-    # Flashcard search logic
+    # Flashcard ask me anything logic
     elif st.session_state["stage"] == "query":
         query = st.text_input("Ask me anything:")
 

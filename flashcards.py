@@ -17,11 +17,23 @@ Topic: {topic}
 flashcards_prompt = PromptTemplate(
     input_variables=["subtopics"],
     template="""
-You are a flashcard creator. For each of the following subtopics, create a simple flashcard. Each flashcard should have a Question and Answer format. Keep the explanation concise but clear.
+                You are an expert flashcard generator. 
+                For each subtopic below, generate one flashcard in the following format, all on one line:
 
-Subtopics:
-{subtopics}
-"""
+                Q: <question>? A: <answer>.
+
+                Instructions:
+                - The question and answer must be on the same line.
+                - Separate the question and answer clearly using "Q: " and "A: ".
+                - Add bullet points before each flashcard.
+                - add line break after each flashcard.
+                - Keep questions clear and answers concise and informative.
+
+                Subtopics:
+                {subtopics}
+
+                Flashcards:
+                """
 )
 
 # Generate flashcards using OpenAI
@@ -57,11 +69,6 @@ def generate_flashcards(text,llmClient):
     #print(flashcards)
     return result['flashcards']
 
-# Initialize FAISS index
-embedding_dim = 1536  # Dimensionality of OpenAI's model embedding
-faiss_index = faiss.IndexFlatL2(embedding_dim)  # L2 distance for similarity search
-flashcard_metadata = []  # List to store flashcard metadata (question, answer)
-
 # Function to generate embeddings using OpenAI
 def generate_embedding(text,client, deployment_name):
     """Generate an embedding vector for a given text using OpenAI's model."""
@@ -76,11 +83,18 @@ def store_flashcard(question, answer,client, deployment_name):
     faiss_index.add(np.array([embedding]))  # Add embedding to FAISS index
     flashcard_metadata.append({"question": question, "answer": answer})  # Store metadata
 
-# Retrieve similar flashcards
+# Retrieve results from tavily AI calls for any question asked
 def search_internet(query, client,top_k=3):
     """Search the internet."""
     queries ="Give the lastest studies/reasearch paper regarding " + query
     responses = client.search(queries , max_result=3)  # Generate embedding for the query
+    return responses
+
+# Retrieve Books urls and names from tavily AI calls for a given topic
+def search_books(topic, client):
+    """Search the internet via Tavily AI."""
+    query ="Provide me the recent and most relevant books url that can be helpful for basic learning on topic " + topic
+    responses = client.search(query,max_result=2) 
     return responses
 
 
