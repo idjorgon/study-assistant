@@ -111,3 +111,4 @@ Ask any question and wait for the response (we are using Tavily to answer this b
 
 1. Adding images/pictures
 2. Level of difficulty
+3. Re-running the chatbox
