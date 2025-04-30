@@ -1,5 +1,3 @@
-import asyncio
-import faiss
 import numpy as np
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
@@ -74,14 +72,6 @@ def generate_embedding(text,client, deployment_name):
     """Generate an embedding vector for a given text using OpenAI's model."""
     response = client.embeddings.create(input=text, model=deployment_name)
     return np.array(response['data'][0]['embedding'], dtype=np.float32)
-
-# Store flashcards in FAISS
-def store_flashcard(question, answer,client, deployment_name):
-    """Store a flashcard's embedding and metadata in FAISS."""
-    text = f"Q: {question}\nA: {answer}"
-    embedding = generate_embedding(text,client, deployment_name)  # Generate embedding
-    faiss_index.add(np.array([embedding]))  # Add embedding to FAISS index
-    flashcard_metadata.append({"question": question, "answer": answer})  # Store metadata
 
 # Retrieve results from tavily AI calls for any question asked
 def search_internet(query, client,top_k=3):
