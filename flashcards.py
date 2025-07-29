@@ -17,8 +17,8 @@ flashcards_prompt = PromptTemplate(
     input_variables=["subtopics"],
     template="""
                 You are an expert flashcard generator.
-                For each subtopic below, generate one flashcard in the following format,
-                all on one line:
+                For each subtopic below, generate one flashcard in 
+                the following format, all on one line:
 
                 Q: <question>? A: <answer>.
 
@@ -92,7 +92,8 @@ def search_internet(query, client, top_k=3):
 def search_books(topic, client):
     """Search the internet via Tavily AI."""
     query = (
-        "Provide me the recent and most relevant books url that can be helpful for basic learning on topic "
+        "Provide me the recent and most relevant books url that can be helpful "
+        "for basic learning on topic "
         + topic
     )
     responses = client.search(query, max_result=2)
