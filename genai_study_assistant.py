@@ -138,17 +138,34 @@ def study_assistant():
 
     # Flashcard generation logic
     elif st.session_state["stage"] == "flashcard":
-        flashcard_word = st.text_input("Enter the text you'd like to convert into flashcards")
+        flashcard_word = st.text_input(
+            "Enter the text you'd like to convert into flashcards"
+        )
 
         if flashcard_word:
             bot_reply = "Generating Flashcards for ..." + flashcard_word
-            st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
+            st.session_state["messages"].append(
+                {
+                    "role": "assistant", 
+                    "content": bot_reply
+                }
+            )
             st.chat_message("assistant").write(bot_reply)
             flashcards = generate_flashcards(flashcard_word, llmClient)
-            st.session_state["messages"].append({"role": "assistant", "content": flashcards})
+            st.session_state["messages"].append(
+                {
+                    "role": "assistant", 
+                    "content": flashcards
+                }
+            )
             st.chat_message("assistant").write(flashcards)
-            bot_reply = "Here are some recent Books to improve on your learning...."
-            st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
+            bot_reply = "Here are some recent books to improve on your learning..."
+            st.session_state["messages"].append(
+                {
+                    "role": "assistant", 
+                    "content": bot_reply
+                }
+            )
             st.chat_message("assistant").write(bot_reply)
             search = search_books(flashcard_word, tavily_client)
 
@@ -156,7 +173,8 @@ def study_assistant():
             if sources:
                 for i, source in enumerate(sources[:2], 1):
                     st.chat_message("assistant").write(
-                        f"**Source {i}:** [{source.get('title', 'No Title')}]({source.get('url', '')})\n"
+                        f"**Source {i}:** [{source.get('title', 'No Title')}]
+                        ({source.get('url', '')})\n"
                     )
             else:
                 st.chat_message("assistant").write("No recent study material found.")
