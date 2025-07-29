@@ -3,7 +3,7 @@ import os
 from tavily import TavilyClient
 from openai import AzureOpenAI
 from dotenv import load_dotenv
-from flashcards import generate_flashcards, search_internet,search_books
+from flashcards import generate_flashcards, search_internet, search_books
 from quiz import generate_quiz
 from summary import summarize_text
 from langchain.chat_models import AzureChatOpenAI
@@ -14,12 +14,12 @@ api_key = os.getenv('AZURE_OPENAI_API_KEY')
 api_endpoint = os.getenv('AZURE_ENDPOINT')
 deployment_name = os.getenv('DEPLOYMENT_NAME')
 apiversion = os.getenv('AZURE_OPENAI_API_VERSION')
-tavilyclient= os.getenv('TAVILY_KEY')
+tavilyclient = os.getenv('TAVILY_KEY')
 
 # Initialize OpenAI client
 client = AzureOpenAI(
   azure_endpoint=api_endpoint,
-  api_key=api_key,  
+  api_key=api_key,
   api_version=apiversion
 )
 
@@ -34,23 +34,47 @@ llmClient = AzureChatOpenAI(
 )
 
 # Main Study Assistant Function
+
+
 def study_assistant():
     with st.sidebar:
-        "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
-        "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
+        (
+            "[View the source code]"
+            "(https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
+        )
+        (
+            "[![Open in GitHub Codespaces]"
+            "(https://github.com/codespaces/badge.svg)]"
+            "(https://codespaces.new/streamlit/llm-examples?quickstart=1)"
+        )
 
     st.title(" My Study Assistant ")
 
     if "messages" not in st.session_state:
-        st.session_state["messages"] =[]
+        st.session_state["messages"] = []
 
     if "stage" not in st.session_state:
         st.session_state["stage"] = "main_menu"
 
     # Initialize chat history and state
     if st.session_state["stage"] == "main_menu":
-        if not st.session_state["messages"] or "Welcome to the GenAI Study" not in st.session_state["messages"][-1]["content"]:
-            st.session_state["messages"].append({"role": "assistant", "content": "Welcome to the GenAI Study Assistant!:\n1. Generate Flashcards 📚\n2. Summarize Text 📜\n3. Generate Quiz 🌎 \n4. Ask me anything!"})
+        if (
+            not st.session_state["messages"]
+            or "Welcome to the GenAI Study"
+            not in st.session_state["messages"][-1]["content"]
+        ):
+            st.session_state["messages"].append(
+                {
+                    "role": "assistant",
+                    "content": (
+                        "Welcome to the GenAI Study Assistant!:\n"
+                        "1. Generate Flashcards 📚\n"
+                        "2. Summarize Text 📜\n"
+                        "3. Generate Quiz 🌎 \n"
+                        "4. Ask me anything!"
+                    ),
+                }
+            )
 
     # Display chat messages
     for msg in st.session_state["messages"]:
