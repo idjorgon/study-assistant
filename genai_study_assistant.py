@@ -112,7 +112,7 @@ def study_assistant():
     # Summarize text logic
     if st.session_state["stage"] == "summarize":
         text = st.text_input(
-            "Enter the text you'd like to summarize: ", 
+            "Enter the text you'd like to summarize: ",
             key="summary_input"
         )
 
@@ -120,13 +120,13 @@ def study_assistant():
             summary = summarize_text(text, client, deployment_name)
             st.session_state["messages"].append(
                 {
-                    "role": "assistant", 
+                    "role": "assistant",
                     "content": text
                 }
             )
             st.session_state["messages"].append(
                 {
-                    "role": "assistant", 
+                    "role": "assistant",
                     "content": summary
                 }
             )
@@ -144,13 +144,13 @@ def study_assistant():
             bot_reply = "Generating Flashcards for ..." + flashcard_word
             st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
             st.chat_message("assistant").write(bot_reply)
-            flashcards = generate_flashcards(flashcard_word,llmClient)
+            flashcards = generate_flashcards(flashcard_word, llmClient)
             st.session_state["messages"].append({"role": "assistant", "content": flashcards})
             st.chat_message("assistant").write(flashcards)
             bot_reply = "Here are some recent Books to improve on your learning...."
             st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
             st.chat_message("assistant").write(bot_reply)
-            search = search_books(flashcard_word,tavily_client)
+            search = search_books(flashcard_word, tavily_client)
 
             sources = search.get("results", [])
             if sources:
@@ -160,7 +160,6 @@ def study_assistant():
                     )
             else:
                 st.chat_message("assistant").write("No recent study material found.")
-    
 
     # Quiz generation logic
     elif st.session_state["stage"] == "quiz":
