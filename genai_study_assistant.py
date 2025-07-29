@@ -173,8 +173,8 @@ def study_assistant():
             if sources:
                 for i, source in enumerate(sources[:2], 1):
                     st.chat_message("assistant").write(
-                        f"**Source {i}:** [{source.get('title', 'No Title')}]
-                        ({source.get('url', '')})\n"
+                        f"**Source {i}:** [{source.get('title', 'No Title')}]"
+                        f"({source.get('url', '')})\n"
                     )
             else:
                 st.chat_message("assistant").write("No recent study material found.")
