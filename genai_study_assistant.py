@@ -85,7 +85,12 @@ def study_assistant():
         choice = st.text_input("Enter your choice .. ")
 
         if choice:
-            st.session_state["messages"].append({"role": "user", "content": choice})
+            st.session_state["messages"].append(
+                {
+                    "role": "user", 
+                    "content": choice
+                }
+            )
             if choice == "1":
                 st.session_state["stage"] = "flashcard"
             elif choice == "2":
@@ -96,7 +101,12 @@ def study_assistant():
                 st.session_state["stage"] = "query"
             else:
                 bot_reply = "Invalid choice. Please try again."
-                st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
+                st.session_state["messages"].append(
+                    {
+                        "role": "assistant", 
+                        "content": bot_reply
+                    }
+                )
                 st.chat_message("assistant").write(bot_reply)
 
     # Summarize text logic
@@ -138,7 +148,7 @@ def study_assistant():
                     )
             else:
                 st.chat_message("assistant").write("No recent study material found.")
-            
+    
 
     # Quiz generation logic
     elif st.session_state["stage"] == "quiz":
@@ -152,7 +162,7 @@ def study_assistant():
             st.session_state["messages"].append({"role": "assistant", "content": text})
             st.session_state["messages"].append({"role": "assistant", "content": quiz})
             st.chat_message("assistant").write(quiz)
-    
+
     # Flashcard ask me anything logic
     elif st.session_state["stage"] == "query":
         query = st.text_input("Ask me anything:")
