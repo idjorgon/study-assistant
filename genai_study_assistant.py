@@ -87,7 +87,7 @@ def study_assistant():
         if choice:
             st.session_state["messages"].append(
                 {
-                    "role": "user", 
+                    "role": "user",
                     "content": choice
                 }
             )
@@ -103,7 +103,7 @@ def study_assistant():
                 bot_reply = "Invalid choice. Please try again."
                 st.session_state["messages"].append(
                     {
-                        "role": "assistant", 
+                        "role": "assistant",
                         "content": bot_reply
                     }
                 )
@@ -111,19 +111,31 @@ def study_assistant():
 
     # Summarize text logic
     if st.session_state["stage"] == "summarize":
-        text = st.text_input("Enter the text you'd like to summarize:" , key="summary_input")
+        text = st.text_input(
+            "Enter the text you'd like to summarize: ", 
+            key="summary_input"
+        )
 
         if text:
             summary = summarize_text(text, client, deployment_name)
-            st.session_state["messages"].append({"role": "assistant", "content": text})
-            st.session_state["messages"].append({"role": "assistant", "content": summary})
+            st.session_state["messages"].append(
+                {
+                    "role": "assistant", 
+                    "content": text
+                }
+            )
+            st.session_state["messages"].append(
+                {
+                    "role": "assistant", 
+                    "content": summary
+                }
+            )
             st.chat_message("assistant").write(summary)
 
             st.session_state.pop("summary_input", None)
             st.session_state["stage"] == "main_menu"
             st.rerun()
-        
-        
+
     # Flashcard generation logic
     elif st.session_state["stage"] == "flashcard":
         flashcard_word = st.text_input("Enter the text you'd like to convert into flashcards")
@@ -171,7 +183,7 @@ def study_assistant():
             bot_reply = "Searching most recent research /books/ articles..." + query
             st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
             st.chat_message("assistant").write(bot_reply)
-            search = search_internet(query,tavily_client,top_k=3)
+            search = search_internet(query, tavily_client, top_k=3)
 
             sources = search.get("results", [])
             if sources:
