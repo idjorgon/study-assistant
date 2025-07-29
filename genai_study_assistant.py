@@ -212,6 +212,7 @@ def study_assistant():
             else:
                 st.chat_message("assistant").write("No sources found.")
 
+
 # Run the assistant
 if __name__ == "__main__":
     study_assistant()
