@@ -27,10 +27,10 @@ jobs:
       run: python --version
 
     # Run linting (TODO: fix linting failures and then uncomment this step)
-    #- name: Lint with flake8
-    #  run: |
-    #     pip install flake8
-    #     flake8 .
+    - name: Lint with flake8
+      run: |
+         pip install flake8
+         flake8 .
 
     # Future: Run tests (what framework will we use?)
     # - name: Run tests

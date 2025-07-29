@@ -1,12 +1,21 @@
 # Summarize text using OpenAI
 def summarize_text(text, client, deployment_name):
     """Summarize the input text."""
-    
+
     messages = [
-        {"role": "system", "content": "You are an assistant that summarizes input text."},
-        {"role": "user", "content": f"Summarize the following text into concise bullet points:\n\n{text}"}
+        {
+            "role": "system",
+            "content": "You are an assistant that summarizes input text."
+        },
+        {
+            "role": "user",
+            "content": (
+                "Summarize the following text into concise bullet points:\n\n"
+                f"{text}"
+            )
+        }
     ]
-    
+
     response = client.chat.completions.create(
         model=deployment_name,
         messages=messages,
