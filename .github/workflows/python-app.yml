@@ -43,9 +43,3 @@ jobs:
       run: |
          echo "Running flake8..."
          flake8 .
-
-    # Future: Run tests (what framework will we use?)
-    # - name: Run tests
-    #   run: |
-    #     pytest
-    #     # or any other test command
