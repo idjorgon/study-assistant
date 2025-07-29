@@ -5,7 +5,7 @@ from langchain.chains import LLMChain, SequentialChain
 subtopics_prompt = PromptTemplate(
     input_variables=["topic"],
     template="""
-You are an expert educator. Break down the following topic into 5 important 
+You are an expert educator. Break down the following topic into 5 important
 subtopics. Output only the subtopics as a simple numbered list.
 
 Topic: {topic}
@@ -17,16 +17,17 @@ flashcards_prompt = PromptTemplate(
     input_variables=["subtopics"],
     template="""
                 You are an expert flashcard generator.
-                For each subtopic below, generate one flashcard in the following format, all on one line:
+                For each subtopic below, generate one flashcard in the following format,
+                all on one line:
 
                 Q: <question>? A: <answer>.
 
                 Instructions:
-                - The question and answer must be on the same line.
-                - Separate the question and answer clearly using "Q: " and "A: ".
-                - Add bullet points before each flashcard.
-                - add line break after each flashcard.
-                - Keep questions clear and answers concise and informative.
+                - Question and answer must be on the same line
+                - Separate question and answer clearly using "Q: " and "A: "
+                - Add bullet points before each flashcard
+                - dd line break after each flashcard
+                - Keep questions clear and answers concise and informative
 
                 Subtopics:
                 {subtopics}
@@ -39,7 +40,6 @@ flashcards_prompt = PromptTemplate(
 
 
 def generate_flashcards(text, llmClient):
-    
     """Generate flashcards (Q&A pairs) from input text."""
     # Chain 1 - Subtopics Generation
     subtopics_chain = LLMChain(
@@ -67,7 +67,6 @@ def generate_flashcards(text, llmClient):
     # Run the final chain
     result = overall_chain.invoke({"topic": input_topic})
 
-    #print(flashcards)
     return result['flashcards']
 
 # Function to generate embeddings using OpenAI
@@ -81,10 +80,10 @@ def generate_embedding(text, client, deployment_name):
 # Retrieve results from tavily AI calls for any question asked
 
 
-def search_internet(query, client,top_k=3):
+def search_internet(query, client, top_k=3):
     """Search the internet."""
-    queries ="Give the lastest studies/reasearch paper regarding " + query
-    responses = client.search(queries , max_result=3)  # Generate embedding for the query
+    queries = "Give the lastest studies/reasearch paper regarding " + query
+    responses = client.search(queries, max_result=3)
     return responses
 
 # Retrieve Books urls and names from tavily AI calls for a given topic
@@ -92,6 +91,9 @@ def search_internet(query, client,top_k=3):
 
 def search_books(topic, client):
     """Search the internet via Tavily AI."""
-    query ="Provide me the recent and most relevant books url that can be helpful for basic learning on topic " + topic
+    query = (
+        "Provide me the recent and most relevant books url that can be helpful for basic learning on topic "
+        + topic
+    )
     responses = client.search(query, max_result=2)
     return responses

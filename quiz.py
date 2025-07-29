@@ -18,7 +18,7 @@ def generate_quiz(text, client, deployment_name):
             ),
         }
     ]
-    
+
     response = client.chat.completions.create(
         model=deployment_name,
         messages=messages,
