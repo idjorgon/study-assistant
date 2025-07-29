@@ -109,7 +109,7 @@ Ask any question and wait for the response (we are using Tavily to answer this b
 
 ## Future/proposed enhancements
 
-1. Suggestion from Joe Palmer: explore Ragas
+1. Explore [Ragas](https://docs.ragas.io/en/stable/) library to evaluate the application
 2. Adding images/pictures
 3. Level of difficulty
 4. Re-running the chatbox
