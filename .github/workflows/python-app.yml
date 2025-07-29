@@ -48,6 +48,5 @@ jobs:
          flake8 .
   
     - uses: streamlit/streamlit-app-action@v0.0.3
-      if: ${{ secrets.AZURE_OPENAI_API_KEY != '' && secrets.AZURE_OPENAI_AD_TOKEN != '' }}
       with:
         app-path: genai_study_assistant.py
