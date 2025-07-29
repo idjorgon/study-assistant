@@ -146,7 +146,7 @@ def study_assistant():
             bot_reply = "Generating Flashcards for ..." + flashcard_word
             st.session_state["messages"].append(
                 {
-                    "role": "assistant", 
+                    "role": "assistant",
                     "content": bot_reply
                 }
             )
@@ -154,7 +154,7 @@ def study_assistant():
             flashcards = generate_flashcards(flashcard_word, llmClient)
             st.session_state["messages"].append(
                 {
-                    "role": "assistant", 
+                    "role": "assistant",
                     "content": flashcards
                 }
             )
@@ -162,7 +162,7 @@ def study_assistant():
             bot_reply = "Here are some recent books to improve on your learning..."
             st.session_state["messages"].append(
                 {
-                    "role": "assistant", 
+                    "role": "assistant",
                     "content": bot_reply
                 }
             )
