@@ -52,3 +52,7 @@ jobs:
         app-path: genai_study_assistant.py
       env:
         AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+        AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
+        AZURE_ENDPOINT: ${{ secrets.AZURE_ENDPOINT }}
+        DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
+        TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
