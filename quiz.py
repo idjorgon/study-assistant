@@ -19,6 +19,7 @@ def generate_quiz(text, client, deployment_name):
         }
     ]
 
+    # Create a chat completion request with specified parameters
     response = client.chat.completions.create(
         model=deployment_name,
         messages=messages,
