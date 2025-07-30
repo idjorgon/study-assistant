@@ -55,4 +55,4 @@ jobs:
         AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
         AZURE_ENDPOINT: ${{ secrets.AZURE_ENDPOINT }}
         DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
-        TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+        TAVILY_KEY: ${{ secrets.TAVILY_KEY }}
