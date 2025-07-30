@@ -17,8 +17,6 @@ jobs:
   build:
     name: Build on Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
-    env:
-      AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
 
     strategy:
       matrix:
@@ -52,3 +50,5 @@ jobs:
     - uses: streamlit/streamlit-app-action@v0.0.3
       with:
         app-path: genai_study_assistant.py
+      env:
+        AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
