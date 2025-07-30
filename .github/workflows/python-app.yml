@@ -56,3 +56,11 @@ jobs:
         AZURE_ENDPOINT: ${{ secrets.AZURE_ENDPOINT }}
         DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
         TAVILY_KEY: ${{ secrets.TAVILY_KEY }}
+    - if: always()
+      uses: pmeier/pytest-results-action@v0.6.0
+      with:
+        path: test-results.xml
+        summary: true
+        display-options: fEX
+        fail-on-empty: true
+        title: Test Results
