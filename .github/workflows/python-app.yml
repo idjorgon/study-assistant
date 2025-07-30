@@ -47,6 +47,11 @@ jobs:
          echo "Running flake8..."
          flake8 .
   
+    - name: Run tests and generate JUnit report
+      run: |
+        echo "Running pytest..."
+        pytest --junitxml=test-results.xml
+
     - uses: streamlit/streamlit-app-action@v0.0.3
       with:
         app-path: genai_study_assistant.py
@@ -56,6 +61,7 @@ jobs:
         AZURE_ENDPOINT: ${{ secrets.AZURE_ENDPOINT }}
         DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
         TAVILY_KEY: ${{ secrets.TAVILY_KEY }}
+
     - if: always()
       uses: pmeier/pytest-results-action@v0.6.0
       with:
