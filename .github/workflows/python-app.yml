@@ -46,6 +46,11 @@ jobs:
       run: |
         echo "Running flake8..."
         flake8 .
+
+    - name: Verify langchain installation
+      run: |
+        pip list | grep langchain
+        python -c "from langchain.prompts import PromptTemplate; print('Import successful')"
   
     - uses: streamlit/streamlit-app-action@v0.0.3
       with:
