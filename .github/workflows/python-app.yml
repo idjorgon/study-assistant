@@ -47,25 +47,25 @@ jobs:
         echo "Running flake8..."
         flake8 .
 
-    # - name: Verify langchain installation
-    #   run: |
-    #     pip list | grep langchain
-    #     python -c "from langchain.prompts import PromptTemplate; print('Import successful')"
+    - name: Verify langchain installation
+      run: |
+        pip list | grep langchain
+        python -c "from langchain.prompts import PromptTemplate; print('Import successful')"
   
-    # - uses: streamlit/streamlit-app-action@v0.0.3
-    #   with:
-    #     app-path: genai_study_assistant.py
-    #     pytest-args: -v --junit-xml=test-results.xml
-    #   env:
-    #     AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
-    #     AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
-    #     AZURE_ENDPOINT: ${{ secrets.AZURE_ENDPOINT }}
-    #     DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
-    #     TAVILY_KEY: ${{ secrets.TAVILY_KEY }}
+    - uses: streamlit/streamlit-app-action@v0.0.3
+      with:
+        app-path: genai_study_assistant.py
+        pytest-args: -v --junit-xml=test-results.xml
+      env:
+        AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+        AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
+        AZURE_ENDPOINT: ${{ secrets.AZURE_ENDPOINT }}
+        DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
+        TAVILY_KEY: ${{ secrets.TAVILY_KEY }}
 
-    # - if: always()
-    #   uses: pmeier/pytest-results-action@v0.7.2
-    #   with:
-    #     path: test-results.xml
-    #     summary: true
-    #     title: Test results
+    - if: always()
+      uses: pmeier/pytest-results-action@v0.7.2
+      with:
+        path: test-results.xml
+        summary: true
+        title: Test results
