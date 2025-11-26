@@ -1,5 +1,5 @@
 import numpy as np
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
 
 subtopics_prompt = PromptTemplate(
