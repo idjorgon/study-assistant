@@ -1,9 +1,10 @@
-# This workflow will trigger when a new issue is opened in the repository.
-# It checks if the issue is labeled as a bug and analyzes the issue content
-# to determine if it contains enough information to reproduce the bug.
-# If the issue does not provide sufficient information, it will comment on the issue
-# with a friendly message asking for more details.
-# Default model: mistral-ai/ministral-3b can be changed inline.
+# This workflow triggers when a new issue is opened or when a user comments '@bot recheck' on an existing issue.
+# It analyzes bug reports to ensure they contain sufficient information for reproduction.
+# The AI checks for: steps to reproduce, expected vs actual behavior, and environment details.
+# If information is missing, it posts an interactive checklist asking the reporter to provide more details.
+# Reporters can update their issue and comment '@bot recheck' to trigger re-analysis.
+#
+# Model: mistral-ai/ministral-3b can be changed inline. This model is best suited for fast, lightweight tasks.
 
 name: Bug Report Reproduction Check
 on:
@@ -77,4 +78,3 @@ jobs:
               issue_number: context.issue.number,
               body
             });
-            
