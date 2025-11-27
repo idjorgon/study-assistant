@@ -45,17 +45,30 @@ jobs:
             Title: ${{ steps.issue.outputs.title }}
             Body: ${{ steps.issue.outputs.body }}
 
-      - name: Comment On Issue
+      - name: Comment with Interactive Checklist
         if: contains(join(github.event.issue.labels.*.name, ','), 'bug') && steps.analyze-issue.outputs.response != 'pass'
         uses: actions/github-script@v7
-        env:
-          AI_RESPONSE: ${{ steps.analyze-issue.outputs.response }}
         with:
           script: |
-            const issue_number = context.issue.number
+            const aiResponse = `${{ steps.analyze-issue.outputs.response }}`;
+            const body = `
+            ## 📋 Bug Report Checklist
+            
+            ${aiResponse}
+            
+            **Please update your issue with:**
+            - [ ] Clear steps to reproduce
+            - [ ] Expected behavior
+            - [ ] Actual behavior
+            - [ ] Environment details (browser, OS, version)
+            - [ ] Screenshots or error messages (if applicable)
+            - [ ] Console logs (if applicable)
+            
+            Once you've added this information, comment \`@bot recheck\` and I'll re-evaluate!
+            `;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number,
-              body: process.env.AI_RESPONSE
-            })
+              issue_number: context.issue.number,
+              body
+            });
