@@ -9,6 +9,8 @@ name: Bug Report Reproduction Check
 on:
   issues:
     types: [opened]
+  issue_comment:
+    types: [created]
 
 permissions:
   contents: read
@@ -18,6 +20,9 @@ permissions:
 jobs:
   reproduction-steps-check:
     runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'issues' || 
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@bot recheck'))
     steps:
       - name: Fetch Issue
         id: issue
@@ -72,3 +77,4 @@ jobs:
               issue_number: context.issue.number,
               body
             });
+            
