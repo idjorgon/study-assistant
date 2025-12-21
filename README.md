@@ -1,6 +1,8 @@
-## Lightweight Streamlit application featuring multiple interactive pages, study and quiz games, data visualization
+## Lightweight Streamlit application 
 
-### This application was vide-coded to demonstrate GitHub Actions workflow capabilities
+### The application features multiple interactive pages, study and quiz games, data visualization
+
+### It was created to demonstrate GitHub Actions workflow capabilities
 
 ## 🚀 Features
 
