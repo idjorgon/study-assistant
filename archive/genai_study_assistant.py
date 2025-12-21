@@ -3,9 +3,9 @@ import os
 from tavily import TavilyClient
 from openai import AzureOpenAI
 from dotenv import load_dotenv
-from flashcards import generate_flashcards, search_internet, search_books
-from quiz import generate_quiz
-from summary import summarize_text
+from archive.flashcards import generate_flashcards, search_internet, search_books
+from archive.quiz import generate_quiz
+from archive.summary import summarize_text
 from langchain.chat_models import AzureChatOpenAI
 
 # Set up your OpenAI API key and credentials

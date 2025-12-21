@@ -1,3 +1,6 @@
+streamlit
+
+# Comment out dependencies for future use
 # langchain>=0.1.0
 # langchain-openai>=0.0.5
 #langchain-community
@@ -6,6 +9,5 @@
 # faiss-cpu
 # numpy
 # python-dotenv
-streamlit
 # tavily-python
 # pytest
