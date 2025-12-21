@@ -1,4 +1,5 @@
 streamlit
+pytest
 
 # Comment out dependencies for future use
 # langchain>=0.1.0
@@ -10,4 +11,3 @@ streamlit
 # numpy
 # python-dotenv
 # tavily-python
-# pytest
