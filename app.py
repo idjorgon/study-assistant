@@ -2,6 +2,8 @@ import streamlit as st
 import random
 import time
 from datetime import datetime, date, timedelta
+import pandas as pd
+import io
 
 # Page configuration
 st.set_page_config(
@@ -191,15 +193,26 @@ if name:
         else:  # Area Chart
             st.area_chart(data)
         
-        # Data statistics
+        # Data statistics and export
         values = list(data.values())
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
         with col1:
             st.metric("Average", f"{sum(values)/len(values):.1f}")
         with col2:
             st.metric("Maximum", max(values))
         with col3:
             st.metric("Minimum", min(values))
+        with col4:
+            # Create DataFrame for export
+            df = pd.DataFrame(list(data.items()), columns=['Label', data_type])
+            csv = df.to_csv(index=False)
+            st.download_button(
+                label="📥 Download CSV",
+                data=csv,
+                file_name=f"{data_type.lower().replace(' ', '_')}_data.csv",
+                mime="text/csv",
+                help="Download the generated data as CSV"
+            )
     
     elif page == "Mini Games":
         st.subheader("🎮 Mini Games")
