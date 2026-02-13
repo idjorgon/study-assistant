@@ -5,6 +5,20 @@ from datetime import datetime, date, timedelta
 import pandas as pd
 import io
 
+# Helper functions for testing
+def generate_csv_from_data(data, data_type):
+    """Generate CSV string from data dictionary.
+    
+    Args:
+        data: Dictionary with labels as keys and values
+        data_type: String representing the type of data (e.g., 'Sales', 'Temperature')
+    
+    Returns:
+        CSV string representation of the data
+    """
+    df = pd.DataFrame(list(data.items()), columns=['Label', data_type])
+    return df.to_csv(index=False)
+
 # Page configuration
 st.set_page_config(
     page_title="Advanced Streamlit App",
@@ -203,9 +217,8 @@ if name:
         with col3:
             st.metric("Minimum", min(values))
         with col4:
-            # Create DataFrame for export
-            df = pd.DataFrame(list(data.items()), columns=['Label', data_type])
-            csv = df.to_csv(index=False)
+            # Generate CSV using helper function
+            csv = generate_csv_from_data(data, data_type)
             st.download_button(
                 label="📥 Download CSV",
                 data=csv,

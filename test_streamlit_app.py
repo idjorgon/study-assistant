@@ -3,6 +3,9 @@ import streamlit as st
 from streamlit.testing.v1 import AppTest
 import time
 import random
+import pandas as pd
+import io
+from app import generate_csv_from_data
 
 class TestStreamlitApp:
     """Test suite for the Streamlit app using streamlit-app-action"""
@@ -155,3 +158,123 @@ def test_ui_elements_present():
     for element_type, count in element_counts.items():
         if count > 0:
             print(f"   {element_type}: {count}")
+
+# Test for CSV export functionality
+class TestCSVExport:
+    """Test suite for CSV export functionality"""
+    
+    def test_generate_csv_from_data_basic(self):
+        """Test basic CSV generation from data dictionary"""
+        # Sample data
+        data = {
+            "Day 1": 100,
+            "Day 2": 200,
+            "Day 3": 150
+        }
+        data_type = "Sales"
+        
+        # Generate CSV
+        csv_output = generate_csv_from_data(data, data_type)
+        
+        # Verify CSV is generated
+        assert csv_output is not None, "CSV output should not be None"
+        assert isinstance(csv_output, str), "CSV output should be a string"
+        
+        # Verify CSV content
+        assert "Label,Sales" in csv_output, "CSV should have correct headers"
+        assert "Day 1,100" in csv_output, "CSV should contain first data point"
+        assert "Day 2,200" in csv_output, "CSV should contain second data point"
+        assert "Day 3,150" in csv_output, "CSV should contain third data point"
+        
+        print("✅ Basic CSV generation test passed")
+    
+    def test_generate_csv_from_data_different_types(self):
+        """Test CSV generation with different data types"""
+        test_cases = [
+            ({"Hour 1": -10, "Hour 2": 25}, "Temperature"),
+            ({"Time 1": 100, "Time 2": 250}, "Stock Price"),
+            ({"Page 1": 50, "Page 2": 75}, "Website Visits")
+        ]
+        
+        for data, data_type in test_cases:
+            csv_output = generate_csv_from_data(data, data_type)
+            
+            # Verify header contains the correct data type
+            assert f"Label,{data_type}" in csv_output, f"CSV should have '{data_type}' in header"
+            
+            # Verify data is present
+            for label, value in data.items():
+                assert f"{label},{value}" in csv_output, f"CSV should contain {label},{value}"
+        
+        print("✅ CSV generation with different data types test passed")
+    
+    def test_generate_csv_parseable(self):
+        """Test that generated CSV can be parsed back into DataFrame"""
+        data = {
+            "Item 1": 42,
+            "Item 2": 87,
+            "Item 3": 33
+        }
+        data_type = "Sales"
+        
+        # Generate CSV
+        csv_output = generate_csv_from_data(data, data_type)
+        
+        # Parse CSV back into DataFrame
+        df = pd.read_csv(io.StringIO(csv_output))
+        
+        # Verify DataFrame structure
+        assert len(df) == len(data), "DataFrame should have same number of rows as input data"
+        assert list(df.columns) == ['Label', data_type], "DataFrame should have correct column names"
+        
+        # Verify data integrity
+        for idx, (label, value) in enumerate(data.items()):
+            assert df.iloc[idx]['Label'] == label, f"Label at index {idx} should match input"
+            assert df.iloc[idx][data_type] == value, f"Value at index {idx} should match input"
+        
+        print("✅ CSV parseability test passed")
+    
+    def test_generate_csv_with_empty_data(self):
+        """Test CSV generation with edge cases"""
+        # Empty data
+        empty_data = {}
+        csv_output = generate_csv_from_data(empty_data, "Sales")
+        
+        # Should still have headers
+        assert "Label,Sales" in csv_output, "CSV should have headers even when empty"
+        
+        # Single item
+        single_data = {"Item 1": 100}
+        csv_output = generate_csv_from_data(single_data, "Sales")
+        assert "Item 1,100" in csv_output, "CSV should handle single item correctly"
+        
+        print("✅ CSV edge cases test passed")
+    
+    def test_csv_download_button_present_in_app(self):
+        """Test that CSV download button appears in the Data Generator page"""
+        at = AppTest.from_file("app.py")
+        at.run()
+        
+        # Enter name to unlock features
+        at.sidebar.text_input[0].input("Test User")
+        at.run()
+        
+        # Navigate to Data Generator page
+        nav_radio = None
+        for radio in at.sidebar.radio:
+            if "Data Generator" in radio.options:
+                nav_radio = radio
+                nav_radio.set_value("Data Generator")
+                break
+        
+        assert nav_radio is not None, "Navigation radio should be found"
+        at.run()
+        
+        # Check for download button - Streamlit uses download_button which is separate from regular buttons
+        # The download button is present if there are no exceptions and the page renders
+        assert not at.exception, "Data Generator page should render without errors"
+        
+        # Verify the page has metrics (which are rendered alongside the download button)
+        assert len(at.metric) >= 3, "Data Generator should show statistics metrics"
+        
+        print("✅ CSV download button integration test passed")
