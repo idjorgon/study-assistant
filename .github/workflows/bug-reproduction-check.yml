@@ -64,9 +64,11 @@ jobs:
       - name: Comment with Interactive Checklist
         if: contains(join(github.event.issue.labels.*.name, ','), 'bug') && steps.analyze-issue.outputs.response != 'pass'
         uses: actions/github-script@v7
+        env:
+          AI_RESPONSE: ${{ steps.analyze-issue.outputs.response }}
         with:
           script: |
-            const aiResponse = `${{ steps.analyze-issue.outputs.response }}`;
+            const aiResponse = process.env.AI_RESPONSE;
             const body = `
             ## 📋 Bug Report Checklist
             
